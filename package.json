@@ -1,0 +1,31 @@
+{
+  "name": "hello3dmcp-server",
+  "version": "0.0.0",
+  "description": "MCP server for controlling 3D model visualization via Model Context Protocol",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "mcp:server": "node server.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "websocket",
+    "3d",
+    "server"
+  ],
+  "author": "Douglass Turner",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.22.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "ws": "^8.18.0",
+    "zod": "^3.25.76"
+  }
+}
+
