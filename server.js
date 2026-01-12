@@ -2129,7 +2129,7 @@ mcpServer.registerTool(
 
     routeToCurrentSession({
       type: 'nudgeModelPitchUp',
-      degrees: degrees
+      degrees: degrees !== undefined ? -degrees : undefined
     });
 
     return {
@@ -2177,7 +2177,7 @@ mcpServer.registerTool(
 
     routeToCurrentSession({
       type: 'nudgeModelPitchDown',
-      degrees: degrees
+      degrees: degrees !== undefined ? -degrees : undefined
     });
 
     return {
