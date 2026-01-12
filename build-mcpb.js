@@ -11,18 +11,36 @@ const minutes = String(now.getMinutes()).padStart(2, '0');
 const seconds = String(now.getSeconds()).padStart(2, '0');
 const timestamp = `${year}${month}${day}-${hours}${minutes}${seconds}`;
 
-const filename = `hello3dmcp-server-${timestamp}.mcpb`;
-const output = fs.createWriteStream(filename);
-const archive = archiver('zip', { zlib: { level: 9 } });
+// Create both timestamped and non-timestamped versions
+const timestampedFilename = `hello3dmcp-server-${timestamp}.mcpb`;
+const productionFilename = `hello3dmcp-server.mcpb`;
 
-output.on('close', () => {
-  console.log(`✅ Package created: ${filename} (${archive.pointer()} bytes)`);
+// Function to create an archive
+function createArchive(filename) {
+  return new Promise((resolve, reject) => {
+    const output = fs.createWriteStream(filename);
+    const archive = archiver('zip', { zlib: { level: 9 } });
+
+    output.on('close', () => {
+      console.log(`✅ Package created: ${filename} (${archive.pointer()} bytes)`);
+      resolve(archive.pointer());
+    });
+
+    archive.on('error', err => reject(err));
+
+    archive.pipe(output);
+    archive.file('manifest.json', { name: 'manifest.json' });
+    archive.directory('dist/', 'dist');
+    archive.finalize();
+  });
+}
+
+// Create both versions
+Promise.all([
+  createArchive(timestampedFilename),
+  createArchive(productionFilename)
+]).catch(err => {
+  console.error('Error creating packages:', err);
+  process.exit(1);
 });
-
-archive.on('error', err => { throw err; });
-
-archive.pipe(output);
-archive.file('manifest.json', { name: 'manifest.json' });
-archive.directory('dist/', 'dist');
-archive.finalize();
 

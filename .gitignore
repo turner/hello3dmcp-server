@@ -24,5 +24,6 @@ package-lock.json
 
 # Build output
 dist/
-*.mcpb
+# Ignore timestamped .mcpb files (for testing), but keep non-timestamped version
+*-*.mcpb
 
