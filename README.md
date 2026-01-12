@@ -1,269 +1,56 @@
 # Hello3DMCP Server - MCP Server for 3D Model Control
 
-MCP server that provides Model Context Protocol (MCP) tools for controlling a 3D model visualization application via WebSocket. This server bridges MCP clients (like ChatGPT, Claude Desktop, Cursor) with the frontend 3D application.
+MCP server that provides Model Context Protocol (MCP) tools for controlling a 3D model visualization application via WebSocket. This server is designed to be installed in **Claude Desktop** as a `.mcpb` package file.
 
 ## Features
 
-- **MCP Protocol Support**: Works with any MCP-compatible client (ChatGPT, Claude Desktop, Cursor, etc.)
-- **Dual Transport Modes**: Supports both STDIO (subprocess) and HTTP/SSE (remote) modes
+- **Claude Desktop Integration**: Install as a self-contained `.mcpb` package file
 - **WebSocket Bridge**: Real-time bidirectional communication with frontend applications
 - **Session Management**: Multi-user support with isolated sessions
 - **State Management**: Query and cache application state for accurate relative operations
+- **Comprehensive 3D Control**: Extensive tools for model, lighting, camera, and scene control
 
-## Quick Start
+## Installation in Claude Desktop
 
-### Prerequisites
+The primary way to use this MCP server is by installing the `.mcpb` package file in Claude Desktop.
 
-- Node.js (v18 or higher)
-- npm
-- Frontend application running (see [hello3dmcp-frontend](https://github.com/aidenlab/hello3dmcp-frontend))
+### Step 1: Build the Package
 
-### Installation
-
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-2. **Configure environment (optional):**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your settings
-   ```
-
-3. **Start the server:**
-   ```bash
-   npm start
-   ```
-   
-   Or:
-   ```bash
-   node server.js
-   ```
-
-The server starts on:
-- **MCP endpoint**: `http://localhost:3000/mcp` (HTTP mode)
-- **WebSocket server**: `ws://localhost:3001`
-
-## Configuration
-
-### Environment Variables
-
-Create a `.env` file (or use environment variables):
+Build the `.mcpb` package file:
 
 ```bash
-# MCP server port (default: 3000)
-MCP_PORT=3000
-
-# WebSocket server port (default: 3001)
-WS_PORT=3001
-
-# Browser URL for the 3D app frontend
-# Used when generating connection URLs for MCP clients
-# Default: http://localhost:5173
-BROWSER_URL=http://localhost:5173
+npm install
+npm run build
 ```
 
-### Command-Line Arguments
+This creates a timestamped `.mcpb` file in your project root (e.g., `hello3dmcp-server-20260112-115054.mcpb`).
 
-You can override environment variables via command-line:
+### Step 2: Install in Claude Desktop
 
-```bash
-# Set browser URL
-node server.js --browser-url https://your-app.netlify.app
+1. **Open Claude Desktop** → **Settings** → **Extensions** → **Advanced Settings**
+2. Click **"Install Extension"**
+3. Select the `.mcpb` file you just built
+4. **Restart Claude Desktop**
 
-# Or using short form
-node server.js -u https://your-app.netlify.app
+### Step 3: Connect to Your 3D Application
 
-# Show help
-node server.js --help
-```
+1. **Start your frontend application** (see [hello3dmcp-frontend](https://github.com/aidenlab/hello3dmcp-frontend))
+2. **In Claude Desktop**, ask Claude:
+   - "How do I connect to the 3D app?" or
+   - "Get browser URL"
+3. Claude will provide a URL with your unique session ID
+4. **Open that URL in your browser** to connect your 3D app to the MCP server
 
-**Configuration Priority:**
-1. Command-line argument (`--browser-url` or `-u`) - highest priority
-2. Environment variable (`BROWSER_URL`)
-3. `.env` file (`BROWSER_URL`)
-4. Default (`http://localhost:5173`) - lowest priority
+### Benefits of the .mcpb Package
 
-## Connecting MCP Clients
+- ✅ **No manual configuration** - Everything is bundled in the package
+- ✅ **Self-contained** - Includes all dependencies and configuration
+- ✅ **Easy updates** - Just rebuild and reinstall when you update the server
+- ✅ **Works with localhost** - No need for public URLs or tunnels
 
-### Quick Comparison: MCP Client Options
+## Testing with MCP Inspector
 
-| Client | Cost | Works with Localhost | Requires Public URL | Best For |
-|--------|------|---------------------|---------------------|----------|
-| **MCP Inspector** | Free | ✅ Yes | ❌ No | Testing & debugging tools |
-| **Cursor** | Free | ✅ Yes | ❌ No | Full IDE with AI assistant |
-| **VS Code + MCP** | Free | ✅ Yes | ❌ No | VS Code users |
-| **Claude Code** | Free | ✅ Yes | ❌ No | CLI-based testing |
-| **Continue.dev** | Free | ✅ Yes | ❌ No | VS Code extension users |
-| **Claude Desktop** | Free | ✅ Yes | ❌ No | Desktop app with Claude |
-| **ChatGPT** | Paid (Plus) | ❌ No | ✅ Yes (tunnel needed) | OpenAI integration |
-
-### Claude Desktop Installation
-
-Install the MCP package (`.mcpb`) file:
-
-1. **Build the package:**
-   ```bash
-   npm run build
-   ```
-   This creates `hello3dmcp-server.mcpb` in your project root.
-
-2. **Install in Claude Desktop:**
-   - Open Claude Desktop → Settings → Extensions → Advanced Settings
-   - Click "Install Extension"
-   - Select the `hello3dmcp-server.mcpb` file
-   - Restart Claude Desktop
-
-3. **Get connection URL:**
-   - Ask Claude: "How do I connect to the 3D app?" or "Get browser URL"
-   - Claude will provide a URL with your unique session ID
-   - Open that URL in your browser
-
-**Benefits:** No manual configuration needed, self-contained package, easy updates.
-
-### ChatGPT Setup
-
-ChatGPT requires a publicly accessible server.
-
-1. **Start server:**
-   ```bash
-   node server.js --browser-url https://your-frontend.netlify.app
-   ```
-
-2. **Create tunnel:**
-   ```bash
-   ngrok http 3000
-   # or
-   lt --port 3000 --subdomain hello3dmcp-server
-   ```
-
-3. **Configure ChatGPT:**
-   - Open ChatGPT → Settings → Personalization → Model Context Protocol
-   - Add server:
-     - **Name**: `hello3dmcp-server`
-     - **URL**: `https://your-tunnel-url/mcp` ⚠️ **Include `/mcp` at the end!**
-     - **Transport**: HTTP or Streamable HTTP
-
-### Cursor
-
-**Option 1: Deeplink (macOS)**
-```bash
-open 'cursor://anysphere.cursor-deeplink/mcp/install?name=hello3dmcp-server&config=eyJ1cmwiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvbWNwIn0='
-```
-
-**Option 2: Manual Configuration**
-1. Open Cursor Settings → Features → Model Context Protocol
-2. Add server:
-   ```json
-   {
-     "mcpServers": {
-       "hello3dmcp-server": {
-         "url": "http://localhost:3000/mcp"
-       }
-     }
-   }
-   ```
-
-### MCP Inspector
-
-The MCP Inspector is a developer tool for testing and debugging MCP servers. It provides an interactive web interface to explore server capabilities, test tools, and view resources.
-
-![MCP Inspector Interface](docs/mcp-inspector-screenshot.png)
-
-*Example: MCP Inspector connected to the server, showing tools being tested.*
-
-**Testing Options:**
-
-You can test either the source code (development) or the bundled version (production):
-
-**Option 1: Test Source Code (Development)**
-
-1. **Start the server from source:**
-   ```bash
-   npm start
-   # or
-   node server.js
-   ```
-   Server should be running on `http://localhost:3000/mcp`
-
-2. **Start the MCP Inspector:**
-   ```bash
-   npx @modelcontextprotocol/inspector http://localhost:3000/mcp
-   ```
-
-**Option 2: Test Bundled Version (Production)**
-
-1. **Build the bundle:**
-   ```bash
-   npm run build:bundle
-   ```
-   This creates `dist/hello3dmcp-server.js`
-
-2. **Start the bundled server:**
-   ```bash
-   npm run start:prod
-   # or
-   node dist/hello3dmcp-server.js
-   ```
-   Server should be running on `http://localhost:3000/mcp`
-
-3. **Start the MCP Inspector:**
-   ```bash
-   npx @modelcontextprotocol/inspector http://localhost:3000/mcp
-   ```
-
-**Using the Inspector:**
-
-3. **Open the Inspector UI:**
-   - The inspector will start a web interface (usually on `http://localhost:5173`)
-   - Open your browser and navigate to the URL shown in the terminal
-
-4. **Configure the connection:**
-   - **Transport Type:** Select "Streamable HTTP" (this matches your server's transport)
-   - **URL:** Enter `http://localhost:3000/mcp` (note: port 3000, not 3001)
-   - **Connection Type:** Select "Direct"
-   - Click the **"Connect"** button
-   - You should see a green dot and "Connected" status when successful
-
-5. **Browse and test tools:**
-   - Click on the **"Tools"** tab in the top navigation bar
-   - You'll see a list of all available tools in the middle pane:
-     - `change_model_color` - Change the color of the 3D model
-     - `change_model_size` - Change the uniform size of the model
-     - `scale_model` - Scale the model independently in each dimension
-     - `change_background_color` - Change the background color of the scene
-     - `set_key_light_intensity` - Set the intensity of the key light
-     - `set_key_light_position` - Set the position of the key light
-     - And more...
-
-6. **Call a tool:**
-   - Click on any tool name in the tools list to select it
-   - The right pane will show the tool's description and parameters
-   - Enter the required parameter value(s) in the input field(s):
-     - For `change_background_color`: Enter a color name (e.g., `"tin"`) or hex code (e.g., `"#878687"`)
-     - For `change_model_size`: Enter a number (e.g., `2.5`)
-     - For `scale_model`: Enter values for x, y, z axes
-   - Click the **"Run Tool"** button (paper airplane icon)
-   - The result will appear below, showing "Success" and the response message
-   - If your 3D app is running and connected, you'll see the changes reflected immediately
-
-7. **View history:**
-   - The bottom-left "History" pane shows all your previous tool calls
-   - Click on any history entry to see its details
-   - Use "Clear" to remove history entries
-
-**Example:** To change the background color to tin:
-1. Select `change_background_color` from the tools list
-2. Enter `tin` in the "color" parameter field
-3. Click "Run Tool"
-4. You'll see: `"Background color changed to tin (#878687)"`
-5. The background in your 3D app will update to the new color
-
-**Note:** The Inspector connects directly to your MCP HTTP endpoint. Make sure your server is running before starting the Inspector. If you're using a tunneled server (for remote access), you can also connect to the tunneled URL:
-```bash
-npx @modelcontextprotocol/inspector https://your-tunnel-url.ngrok-free.app/mcp
-```
+For development and testing purposes, you can test the server using the MCP Inspector. See [Testing with MCP Inspector](docs/testing-with-mcp-inspector.md) for detailed instructions.
 
 ## Available MCP Tools
 
@@ -313,9 +100,8 @@ The server provides extensive tools for controlling the 3D model:
 
 ## Architecture
 
-The server supports **two transport modes**:
+The server runs as a subprocess in Claude Desktop:
 
-### STDIO Mode (Subprocess - Claude Desktop)
 ```
 ┌─────────────────┐         ┌──────────────┐         ┌─────────────┐
 │ Claude Desktop  │──stdin▶│  MCP Server   │────────▶│  WebSocket  │
@@ -328,107 +114,81 @@ The server supports **two transport modes**:
                                                      └─────────────────┘
 ```
 
-### HTTP/SSE Mode (ChatGPT, Manual)
-```
-┌─────────────────┐         ┌──────────────┐         ┌─────────────┐
-│   MCP Client    │──HTTP──▶│  MCP Server   │────────▶│  WebSocket  │
-│  (AI Assistant) │──SSE───▶│  (server.js)  │         │   Server    │
-└─────────────────┘         └──────────────┘         └─────────────┘
-                                      │                       │
-                                      │              ┌────────▼────────┐
-                                      └──────────────▶│  Frontend App   │
-                                                     │  (WebSocket)     │
-                                                     └─────────────────┘
-```
-
 **How it works:**
-1. **MCP Client** sends tool call requests to the MCP Server (via STDIO or HTTP/SSE)
-2. **MCP Server** auto-detects the transport mode and processes requests accordingly
+1. **Claude Desktop** spawns the MCP server as a subprocess (via STDIO)
+2. **MCP Server** processes tool call requests from Claude
 3. **MCP Server** routes commands via WebSocket to connected browser clients (by session ID)
 4. **Frontend App** receives WebSocket messages and updates the 3D model
 5. Changes are immediately visible in the browser
 
-**Transport Detection:**
-- **STDIO Mode**: Automatically detected when `stdin` is not a TTY (subprocess)
-- **HTTP Mode**: Automatically detected when `stdin` is a TTY (manual execution)
+## Configuration
 
-## WebSocket Protocol
+The `.mcpb` package includes configuration in `manifest.json`. The default configuration includes:
 
-The server communicates with frontend applications via WebSocket:
+- **MCP Port**: 3000 (for HTTP mode testing)
+- **WebSocket Port**: 3001
+- **Browser URL**: `https://hello3dmcp-frontend.netlify.app/` (default frontend)
 
-### Session Registration
+To customize these settings, edit `manifest.json` before building the package:
 
-Frontend sends on connection:
 ```json
 {
-  "type": "registerSession",
-  "sessionId": "<session-id>"
+  "server": {
+    "mcp_config": {
+      "env": {
+        "BROWSER_URL": "https://your-frontend.netlify.app/",
+        "MCP_PORT": "3000",
+        "WS_PORT": "3001"
+      }
+    }
+  }
 }
 ```
 
-### Sending Commands
-
-Server sends commands to frontend:
-```json
-{
-  "type": "changeColor",
-  "color": "#ff0000"
-}
-```
-
-### State Queries
-
-Server can request current state:
-```json
-{
-  "type": "requestState",
-  "requestId": "<unique-id>",
-  "forceRefresh": false
-}
-```
-
-Frontend responds:
-```json
-{
-  "type": "stateResponse",
-  "requestId": "<unique-id>",
-  "state": { /* current state object */ }
-}
-```
-
-## Deployment
-
-### Railway
-
-1. **Connect repository** to Railway
-2. **Set environment variables:**
-   - `MCP_PORT`: 3000 (or Railway's assigned port)
-   - `WS_PORT`: 3001 (or use same port as MCP_PORT)
-   - `BROWSER_URL`: Your frontend URL
-3. **Deploy**
-
-### Render
-
-1. **Create new Web Service**
-2. **Set environment variables:**
-   - `MCP_PORT`: 3000
-   - `WS_PORT`: 3001
-   - `BROWSER_URL`: Your frontend URL
-3. **Deploy**
-
-### Fly.io
-
-1. **Create `fly.toml`** configuration
-2. **Set environment variables** via `fly secrets`
-3. **Deploy**: `fly deploy`
-
-### Important Notes
-
-- **WebSocket Support**: Ensure your hosting platform supports WebSocket connections
-- **Port Configuration**: Some platforms assign a single port - you may need to use the same port for both MCP and WebSocket
-- **HTTPS/WSS**: Use `wss://` (secure WebSocket) for production deployments
+Then rebuild the package with `npm run build`.
 
 ## Development
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- npm
+- Frontend application running (see [hello3dmcp-frontend](https://github.com/aidenlab/hello3dmcp-frontend))
+
+### Local Development
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Start the server:**
+   ```bash
+   npm start
+   ```
+   
+   The server starts on:
+   - **MCP endpoint**: `http://localhost:3000/mcp` (HTTP mode)
+   - **WebSocket server**: `ws://localhost:3001`
+
+3. **Test with MCP Inspector:**
+   See [Testing with MCP Inspector](docs/testing-with-mcp-inspector.md)
+
+### Building the Package
+
+To create a new `.mcpb` package:
+
+```bash
+npm run build
+```
+
+This will:
+1. Bundle the server code using esbuild (`npm run build:bundle`)
+2. Package everything into a `.mcpb` file (`npm run build:package`)
+
+The resulting `.mcpb` file contains:
+- `manifest.json` - Package metadata and configuration
+- `dist/hello3dmcp-server.js` - Bundled server code
 
 ### Adding New Tools
 
@@ -457,37 +217,36 @@ Frontend responds:
 
 2. **Frontend handles command** in `Application.js` WebSocket message handler
 
-3. **Update documentation** in README.md
+3. **Rebuild the package** with `npm run build`
+
+4. **Reinstall in Claude Desktop** to use the new tool
 
 ## Troubleshooting
 
-### Port Already in Use
+### Package Installation Issues
 
-```bash
-# Check what's using the ports
-lsof -i :3000 -i :3001
+- **Claude Desktop doesn't recognize the file**: Make sure you're selecting a `.mcpb` file, not a `.zip` or other format
+- **Server doesn't start**: Check that `dist/hello3dmcp-server.js` exists in the package
+- **Tools not appearing**: Restart Claude Desktop after installation
 
-# Kill processes
-lsof -ti :3000 -ti :3001 | xargs kill -9
-```
+### Connection Issues
 
-### WebSocket Connection Issues
+- **Can't get browser URL**: Make sure the frontend application is running
+- **WebSocket connection fails**: Verify the WebSocket server is running on port 3001
+- **Changes not reflected**: Check that the browser is connected with the correct session ID
 
-- Verify WebSocket server is running on port 3001
-- Check firewall/security groups allow WebSocket connections
-- Ensure frontend is connecting with correct session ID
+### Development Issues
 
-### MCP Client Can't Connect
+- **Port already in use:**
+   ```bash
+   # Check what's using the ports
+   lsof -i :3000 -i :3001
+   
+   # Kill processes
+   lsof -ti :3000 -ti :3001 | xargs kill -9
+   ```
 
-- Verify MCP endpoint is accessible: `http://localhost:3000/mcp`
-- Check CORS settings (server allows all origins by default)
-- For remote clients, ensure tunnel is running and URL is correct
-
-### Tools Not Appearing
-
-- Restart MCP client after server changes
-- Check server logs for errors
-- Verify server started successfully
+- **Build errors**: Make sure all dependencies are installed with `npm install`
 
 ## Related Projects
 
@@ -500,4 +259,3 @@ MIT
 ## Contributing
 
 Contributions welcome! Please feel free to submit a Pull Request.
-
