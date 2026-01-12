@@ -25,5 +25,6 @@ package-lock.json
 # Build output
 dist/
 # Ignore timestamped .mcpb files (for testing), but keep non-timestamped version
-*-*.mcpb
+# Pattern matches files with at least two dashes (timestamp format: hello3dmcp-server-YYYYMMDD-HHMMSS.mcpb)
+*-*-*.mcpb
 
