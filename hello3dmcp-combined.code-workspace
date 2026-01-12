@@ -5,8 +5,8 @@
 			"path": "."
 		},
 		{
-			"name": "Hello3DLLM",
-			"path": "../Hello3DLLM"
+			"name": "hello3dmcp-frontend",
+			"path": "/Users/turner/MCPDevelopment/hello3dmcp-frontend"
 		}
 	],
 	"settings": {
@@ -15,4 +15,3 @@
 		}
 	}
 }
-
