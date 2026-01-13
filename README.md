@@ -23,7 +23,7 @@ npm install
 npm run build
 ```
 
-This creates a timestamped `.mcpb` file in your project root (e.g., `hello3dmcp-server-20260112-115054.mcpb`).
+This creates a `.mcpb` file (`hello3dmcp-server.mcpb`) in your project root. A timestamped version is also created (e.g., `hello3dmcp-server-20260112-115054.mcpb`) for testing and development purposes, but it is git ignored and does not become part of the project.
 
 ### Step 2: Install in Claude Desktop
 
@@ -40,6 +40,8 @@ This creates a timestamped `.mcpb` file in your project root (e.g., `hello3dmcp-
    - "Get browser URL"
 3. Claude will provide a URL with your unique session ID
 4. **Open that URL in your browser** to connect your 3D app to the MCP server
+
+📖 **New to using the tool?** See [Natural Language Interaction Guide](docs/mcp-notes/natural-language-interaction.md) for detailed instructions on how to interact with Claude to control your 3D scene.
 
 ### Benefits of the .mcpb Package
 

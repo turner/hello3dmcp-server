@@ -2809,6 +2809,41 @@ mcpServer.registerTool(
   }
 );
 
+// Helper function to get browser connection URL
+async function getBrowserConnectionUrl() {
+  // In STDIO mode, use the unique STDIO session ID generated at startup
+  // In HTTP mode, get session ID from context
+  let sessionId;
+  if (isStdioMode) {
+    sessionId = STDIO_SESSION_ID;
+  } else {
+    sessionId = sessionContext.getStore();
+  }
+  
+  if (!sessionId) {
+    return {
+      content: [
+        {
+          type: 'text',
+          text: 'Error: No active session found. Please ensure the MCP connection is properly initialized.'
+        }
+      ],
+      isError: true
+    };
+  }
+
+  const connectionUrl = `${BROWSER_URL}?sessionId=${sessionId}`;
+  
+  return {
+    content: [
+      {
+        type: 'text',
+        text: `To connect your browser to the 3D visualization app, open this URL:\n\n${connectionUrl}\n\nCopy and paste this URL into your web browser to begin interacting with the 3D scene.`
+      }
+    ]
+  };
+}
+
 // Register tool: get_browser_connection_url
 mcpServer.registerTool(
   'get_browser_connection_url',
@@ -2817,39 +2852,73 @@ mcpServer.registerTool(
     description: 'Get the URL to open in your browser to connect the 3D visualization app. Use this when users ask how to connect or how to open the 3D app.',
     inputSchema: {}
   },
-  async () => {
-    // In STDIO mode, use the unique STDIO session ID generated at startup
-    // In HTTP mode, get session ID from context
-    let sessionId;
-    if (isStdioMode) {
-      sessionId = STDIO_SESSION_ID;
-    } else {
-      sessionId = sessionContext.getStore();
-    }
-    
-    if (!sessionId) {
-      return {
-        content: [
-          {
-            type: 'text',
-            text: 'Error: No active session found. Please ensure the MCP connection is properly initialized.'
-          }
-        ],
-        isError: true
-      };
-    }
+  getBrowserConnectionUrl
+);
 
-    const connectionUrl = `${BROWSER_URL}?sessionId=${sessionId}`;
-    
-    return {
-      content: [
-        {
-          type: 'text',
-          text: `To connect your browser to the 3D visualization app, open this URL:\n\n${connectionUrl}\n\nCopy and paste this URL into your web browser to begin interacting with the 3D scene.`
-        }
-      ]
-    };
-  }
+// Register tool: hello_3d_app
+mcpServer.registerTool(
+  'hello_3d_app',
+  {
+    title: 'Hello 3D App',
+    description: 'Get the URL to open the 3D visualization app in your browser. Use this when users want to launch, open, or connect to the 3D app.',
+    inputSchema: {}
+  },
+  getBrowserConnectionUrl
+);
+
+// Register tool: get_3d_app
+mcpServer.registerTool(
+  'get_3d_app',
+  {
+    title: 'Get 3D App',
+    description: 'Get the URL to open the 3D visualization app in your browser. Use this when users ask for the 3D app URL or how to access the 3D visualization.',
+    inputSchema: {}
+  },
+  getBrowserConnectionUrl
+);
+
+// Register tool: open_3d_app
+mcpServer.registerTool(
+  'open_3d_app',
+  {
+    title: 'Open 3D App',
+    description: 'Get the URL to open the 3D visualization app in your browser. Use this when users want to open or launch the 3D visualization.',
+    inputSchema: {}
+  },
+  getBrowserConnectionUrl
+);
+
+// Register tool: connect_3d_app
+mcpServer.registerTool(
+  'connect_3d_app',
+  {
+    title: 'Connect 3D App',
+    description: 'Get the URL to connect your browser to the 3D visualization app. Use this when users want to connect to or access the 3D scene.',
+    inputSchema: {}
+  },
+  getBrowserConnectionUrl
+);
+
+// Register tool: launch_3d_visualization
+mcpServer.registerTool(
+  'launch_3d_visualization',
+  {
+    title: 'Launch 3D Visualization',
+    description: 'Get the URL to launch the 3D visualization app in your browser. Use this when users want to start or launch the 3D scene viewer.',
+    inputSchema: {}
+  },
+  getBrowserConnectionUrl
+);
+
+// Register tool: get_3d_visualization_url
+mcpServer.registerTool(
+  'get_3d_visualization_url',
+  {
+    title: 'Get 3D Visualization URL',
+    description: 'Get the URL to access the 3D visualization app in your browser. Use this when users ask for the URL to view or interact with the 3D scene.',
+    inputSchema: {}
+  },
+  getBrowserConnectionUrl
 );
 
 // Set up Express HTTP server for MCP transport
