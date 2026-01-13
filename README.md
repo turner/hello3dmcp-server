@@ -14,25 +14,14 @@ MCP server that provides Model Context Protocol (MCP) tools for controlling a 3D
 
 The primary way to use this MCP server is by installing the `.mcpb` package file in Claude Desktop.
 
-### Step 1: Build the Package
-
-Build the `.mcpb` package file:
-
-```bash
-npm install
-npm run build
-```
-
-This creates a `.mcpb` file (`hello3dmcp-server.mcpb`) in your project root. A timestamped version is also created (e.g., `hello3dmcp-server-20260112-115054.mcpb`) for testing and development purposes, but it is git ignored and does not become part of the project.
-
-### Step 2: Install in Claude Desktop
+### Step 1: Install in Claude Desktop
 
 1. **Open Claude Desktop** → **Settings** → **Extensions** → **Advanced Settings**
 2. Click **"Install Extension"**
-3. Select the `.mcpb` file you just built
+3. Select the `.mcpb` file (`hello3dmcp-server.mcpb`) from this project
 4. **Restart Claude Desktop**
 
-### Step 3: Connect to Your 3D Application
+### Step 2: Connect to Your 3D Application
 
 1. **Start your frontend application** (see [hello3dmcp-frontend](https://github.com/aidenlab/hello3dmcp-frontend))
 2. **In Claude Desktop**, ask Claude:
@@ -42,6 +31,8 @@ This creates a `.mcpb` file (`hello3dmcp-server.mcpb`) in your project root. A t
 4. **Open that URL in your browser** to connect your 3D app to the MCP server
 
 📖 **New to using the tool?** See [Natural Language Interaction Guide](docs/mcp-notes/natural-language-interaction.md) for detailed instructions on how to interact with Claude to control your 3D scene.
+
+> **Note for Developers**: If you want to make changes to this project and build your own version, you'll need to build the package using `npm install` and `npm run build`. This creates a new `.mcpb` file that you can then install in Claude Desktop. See the [Development](#development) section for more details.
 
 ### Benefits of the .mcpb Package
 
