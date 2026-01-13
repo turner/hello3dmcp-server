@@ -250,7 +250,7 @@ The resulting `.mcpb` file contains:
 
 ## Related Projects
 
-- [hello3dmcp-frontend](https://github.com/aidenlab/hello3dmcp-frontend) - 3D visualization frontend application
+- [hello3dmcp-frontend](https://github.com/aidenlab/hello3dmcp-frontend) - Standalone Three.js 3D visualization application designed to be driven by this MCP server
 
 ## License
 
