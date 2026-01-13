@@ -47,49 +47,81 @@ For development and testing purposes, you can test the server using the MCP Insp
 
 ## Available MCP Tools
 
-The server provides extensive tools for controlling the 3D model:
+The server provides extensive tools for controlling the 3D model. You interact with these tools using **simple, natural language** in Claude Desktop. Just tell Claude what you want to do with the 3D model, and Claude will use the appropriate tool.
 
 ### Model Control
 - `change_model_color` - Change model color (hex or Apple crayon color name)
+  - *Example: "Change the model color to blue" or "Make the model red"*
 - `change_model_size` - Change uniform model size
+  - *Example: "Make the model bigger" or "Scale the model to 2.5"*
 - `scale_model` - Scale model independently in x, y, z dimensions
+  - *Example: "Stretch the model vertically" or "Make it wider"*
 - `set_model_rotation` - Set model rotation (Euler angles)
+  - *Example: "Rotate the model to 45 degrees"*
 - `rotate_model_clockwise` - Rotate model clockwise (relative)
+  - *Example: "Rotate the model clockwise" or "Turn it to the right"*
 - `rotate_model_counterclockwise` - Rotate model counterclockwise (relative)
+  - *Example: "Rotate the model counterclockwise" or "Turn it to the left"*
 - `nudge_model_pitch_up` - Adjust model pitch up (relative)
+  - *Example: "Tilt the model up" or "Pitch it forward"*
 - `nudge_model_pitch_down` - Adjust model pitch down (relative)
+  - *Example: "Tilt the model down" or "Pitch it back"*
 - `nudge_model_roll` - Adjust model roll (relative)
+  - *Example: "Roll the model" or "Tilt it sideways"*
 - `get_model_color` - Get current model color
+  - *Example: "What color is the model?" or "Show me the current model color"*
 - `get_model_scale` - Get current model scale
+  - *Example: "What's the current scale?" or "How big is the model?"*
 - `get_model_rotation` - Get current model rotation
+  - *Example: "What's the current rotation?" or "How is the model rotated?"*
 
 ### Lighting Control
 - `set_key_light_intensity` - Set key light intensity
+  - *Example: "Make the key light brighter" or "Set key light intensity to 0.8"*
 - `set_key_light_color` - Set key light color
+  - *Example: "Change the key light to warm white" or "Make the key light yellow"*
 - `set_key_light_position_spherical` - Set key light position (spherical coordinates)
+  - *Example: "Move the key light to the top right"*
 - `set_key_light_distance` - Set key light distance
+  - *Example: "Move the key light farther away" or "Set key light distance to 5"*
 - `swing_key_light_up/down/left/right` - Swing key light in directions
+  - *Example: "Move the key light up" or "Swing the key light to the left"*
 - `walk_key_light_in/out` - Move key light closer/farther
+  - *Example: "Bring the key light closer" or "Move the key light away"*
 - `rotate_key_light_clockwise/counterclockwise` - Rotate key light
+  - *Example: "Rotate the key light clockwise" or "Turn the key light around"*
 - `nudge_key_light_elevation_up/down` - Adjust key light elevation
+  - *Example: "Raise the key light" or "Lower the key light elevation"*
 - `move_key_light_toward_direction` - Move key light toward direction
-- Similar tools for fill light
+  - *Example: "Move the key light toward the front"*
+- Similar tools for fill light (e.g., `set_fill_light_intensity`, `swing_fill_light_up`, etc.)
+  - *Example: "Make the fill light dimmer" or "Move the fill light to the side"*
 - `get_key_light_*` / `get_fill_light_*` - Query light properties
+  - *Example: "What's the key light intensity?" or "Where is the fill light positioned?"*
 
 ### Camera Control
 - `dolly_camera` - Set camera distance
+  - *Example: "Move the camera closer" or "Set camera distance to 10"*
 - `dolly_camera_in/out` - Move camera closer/farther
+  - *Example: "Zoom in" or "Pull the camera back"*
 - `set_camera_fov` - Set camera field of view
+  - *Example: "Set the field of view to 60 degrees"*
 - `increase_camera_fov` / `decrease_camera_fov` - Adjust FOV
+  - *Example: "Widen the view" or "Narrow the field of view"*
 - `get_camera_distance` - Get camera distance
+  - *Example: "How far is the camera?" or "What's the camera distance?"*
 - `get_camera_fov` - Get camera FOV
+  - *Example: "What's the field of view?" or "Show me the camera FOV"*
 
 ### Scene Control
 - `change_background_color` - Change scene background color
+  - *Example: "Change the background to black" or "Make the background white"*
 - `get_background_color` - Get background color
+  - *Example: "What color is the background?"*
 
 ### Connection
 - `get_browser_connection_url` - Get URL to connect browser to 3D app
+  - *Example: "How do I connect to the 3D app?" or "Get browser URL"*
 
 ## Architecture
 
